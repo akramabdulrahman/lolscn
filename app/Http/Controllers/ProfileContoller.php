@@ -16,7 +16,11 @@ class ProfileContoller extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $posts = Auth::user()->posts()->orderBy('created_at', 'desc')->get();
+        $user = Auth::user();
+        $postsWithoutShared = $user->posts()->orderBy('created_at', 'desc')->get();
+        $postsIshared = $user->shared()->merge($postsWithoutShared);
+        $posts = $user->sharedOnMyWall()->merge($postsIshared)->sortByDesc('created_at');
+        
         $currentUser = $user = Auth::user();
         return view('profile', compact('user', 'posts', 'currentUser'));
     }
@@ -48,8 +52,10 @@ class ProfileContoller extends Controller {
      */
     public function show($id) {
         $user = User::findOrFail($id);
-        $posts = $user->posts()->orderBy('created_at', 'desc')->get();
-        
+        $postsWithoutShared = $user->posts()->orderBy('created_at', 'desc')->get();
+        $postsIshared = $user->shared()->merge($postsWithoutShared);
+        $posts = $user->sharedOnMyWall()->merge($postsIshared)->sortByDesc('created_at');
+
         $currentUser = Auth::user();
         return view('profile', compact('user', 'posts', 'currentUser'));
     }
@@ -75,11 +81,11 @@ class ProfileContoller extends Controller {
         $user = Auth::user();
 
 
-        
+
         try {
             $values = Input::only($user->getFillable());
             $user->update($values);
-           // dd($user,$values);
+            // dd($user,$values);
         } catch (Exception $ex) {
             return response($ex->getMessage(), 400);
         }

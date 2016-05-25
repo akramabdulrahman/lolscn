@@ -13,7 +13,7 @@ use Hootlex\Friendships\Models\Friendship;
 use Auth;
 use Cmgmyr\Messenger\Models\Thread;
 use Hootlex\Friendships\Status;
-use App\country;
+use App\Country;
 
 /**
  * Description of NotificationsComposer

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSummonersTable extends Migration
+class CreateMatchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,8 @@ class CreateSummonersTable extends Migration
      */
     public function up()
     {
-        Schema::create('summoners', function (Blueprint $table) {
+        Schema::create('matches', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('riot_id');
-            $table->string('name');
-            $table->string('server');
-            $table->integer('lvl')->unsigned();
-            $table->string('Icon');
-            $table->string('token');
             $table->timestamps();
         });
     }
@@ -31,6 +25,6 @@ class CreateSummonersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('summoners');
+        Schema::drop('matches');
     }
 }

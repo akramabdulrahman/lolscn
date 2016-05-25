@@ -33,7 +33,7 @@
     <div class="leftsideprofile">
         <div class="profile"> 
             <a href="{{url('profile/settings')}}" ><div class="editmyprofile"></div></a>
-            <div class="circle" style="background-image: url('{{ url("images/profile/".Auth::user()->id) }} no-repeat')"></div>
+            <div class="circle" ><img src='{{ url("images/profile/".Auth::user()->id) }}'></div>
             <div class="profileName">{{$currentUser->name }}</div>
             <div class="nickName">{{$currentUser->nickname }}</div>
         </div> 
@@ -73,6 +73,7 @@
         </div>
         <div class="clear"></div>
 
+        @include('flash')
 
         @if($posts->count() > 0)
         @include('partials.posts.posts', array('posts'=>$posts));

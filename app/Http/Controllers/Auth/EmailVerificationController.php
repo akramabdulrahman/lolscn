@@ -17,9 +17,8 @@ class EmailVerificationController extends Controller {
     public function sendVerification(Request $request, MailVerificationMailer $mailer) {
         $user = Auth::user();
         $mailer->sendEmailConfirmationTo($user);
-
         session()->flash('message', trans('flashmessages.mail_sent', ['email' => $user->email]));
-        return view('flash');
+        return redirect()->back();//->with(array('message', trans('flashmessages.mail_sent', ['email' => $user->email])));
     }
 
     /**

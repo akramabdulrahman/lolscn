@@ -52,4 +52,16 @@ class CommentsController extends Controller {
         ]);
     }
 
+    public function delete($id) {
+        $comment = Comment::findorfail($id);
+        $msg = [];
+        if (Auth::user()->id === $comment->user_id) {
+            $comment->delete();
+            $msg = array('status' => 'comment deleted successfully');
+        } else {
+            $msg = array('error' => 'you dont have authority');
+        }
+        return redirect()->back()->with($msg);
+    }
+
 }

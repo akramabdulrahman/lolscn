@@ -37,8 +37,8 @@ class MessagesController extends Controller {
         // $threads = Thread::forUserWithNewMessages($currentUserId)->latest('updated_at')->get();
 
         $threads = Thread::forUser(Auth::user()->id)->latest('updated_at')->distinct('id')->get();
-       $activeThreadMessages=[];
-       $activethread='';
+        $activeThreadMessages = [];
+        $activethread = '';
         if (count($threads) > 0) {
             $activeThreadMessages = $threads[0]->messages()->get();
             $activethread = $threads[0]->id;
@@ -100,6 +100,7 @@ class MessagesController extends Controller {
                             [
                                 'subject' => Auth::user()->id . "_" . $id,
             ]);
+            $thread->addParticipants([$id]);
         }
         return redirect('messages/' . $thread->id);
     }

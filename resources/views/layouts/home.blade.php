@@ -20,6 +20,7 @@ and open the template in the editor.
         <link href="{{ url('css/datepicker.css') }}" rel="stylesheet" type="text/css"/>
     </head>
     <body>
+
         <div class="top_navigation">
             <div class="centerbutton">
                 <div class="left">
@@ -60,6 +61,7 @@ and open the template in the editor.
             </div>
         </div>
         <div class="clear"></div>
+
         @yield('content')
         <!-- JavaScripts -->
 

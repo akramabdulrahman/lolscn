@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Activity;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Hash;
+use App\Models\Social\Share;
 
 class User extends Authenticatable implements CanResetPassword {
 
@@ -101,6 +102,12 @@ trait Relations {
     public function clans() {
         return $this->belongsToMany('App\Models\Social\clans');
     }
+    /**
+     * retrieve message source user 
+     * * */
+    public function summoners() {
+        return $this->belongsToMany('App\Models\Riot\Summoner');
+    }
 
     /**
      * retrieve likes made by user 
@@ -121,8 +128,21 @@ trait Relations {
      * 
      * @return Mixed 
      * * */
-    public function sharedPosts() {
-        return $this->hasManyThrough('App\Models\Social\Post', 'App\Models\Social\Share');
+    public function shared() {
+        return Share::Where('user_id', '=', $this->id)->where('share_type', '=', Models\Social\Share_type::SHARED_BY_USER)->get()->map(function ($item, $key) {
+                    return $item->post;
+                });
+    }
+
+    /**
+     * retrieve user shared posts
+     * 
+     * @return Mixed 
+     * * */
+    public function sharedOnMyWall() {
+        return Share::Where('user_id', '=', $this->id)->where('share_type', '=', Models\Social\Share_type::FRIEND_POSTED_ON_MY_WALL)->get()->map(function ($item, $key) {
+                    return $item->post;
+                });
     }
 
     /**

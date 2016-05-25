@@ -17,13 +17,13 @@ class LikesController extends Controller {
     public function storeOnPost($id) {
         $post = Post::where('id', $id)->firstOrFail();
         $post->likes()->save($this->createLike($id, 0));
-        return redirect()->away("/");
+        return redirect()->back();
     }
 
     public function storeOnComment($id) {
         $comment = Comment::where('id', $id)->firstOrFail();
         $comment->likes()->save($this->createLike($id, 1));
-        return redirect()->away("/");
+        return redirect()->back();
     }
 
     function createLike($id, $type) {
@@ -37,12 +37,12 @@ class LikesController extends Controller {
 
     public function deleteOnPost($id) {
         Like::where(array('user_id' => Auth::user()->id, 'likable_id' => $id, 'likable_type' => 'App\Models\Social\Post'))->delete();
-        return redirect()->away("/");
+        return redirect()->back();
     }
 
     public function deleteOnComment($id) {
         Like::where(array('user_id' => Auth::user()->id, 'likable_id' => $id, 'likable_type' => 'App\Models\Social\Comment'))->delete();
-        return redirect()->away("/");
+        return redirect()->back();
     }
 
 }

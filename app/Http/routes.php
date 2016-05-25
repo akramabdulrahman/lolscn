@@ -4,6 +4,8 @@ use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Models\Social\Post;
+use App\Models\Riot\Summoner;
+
 /*
   |--------------------------------------------------------------------------
   | Application Routes
@@ -18,7 +20,7 @@ use App\Models\Social\Post;
 
 Route::auth();
 
-$this->get('password/reset/{token?}', array('middleware'=>'delog','uses'=>'Auth\PasswordController@showResetForm'));
+$this->get('password/reset/{token?}', array('middleware' => 'delog', 'uses' => 'Auth\PasswordController@showResetForm'));
 
 //auth Login end
 
@@ -52,12 +54,15 @@ Route::get('/messages/user/{id}', 'MessagesController@messageToUser');
 //messages end
 //posts
 Route::post('/post', 'PostsController@store');
+Route::get('/post/delete/{id}', 'PostsController@delete');
+Route::post('/post/onwall', 'PostsController@storeOnFriendWall');
 
 //posts end
 //comments 
 Route::group(['prefix' => 'comments'], function () {
     Route::post('/post', ['as' => 'comments.storeOnPost', 'uses' => 'CommentsController@storeOnPost']);
     Route::post('/comment', ['as' => 'comments.storeOnComment', 'uses' => 'CommentsController@storeOnComment']);
+    Route::get('/delete/{id}', ['as' => 'comments.delete', 'uses' => 'CommentsController@delete']);
 });
 //comments end
 //likes
@@ -79,14 +84,19 @@ Route::group(['prefix' => 'friendship'], function () {
     Route::get('/unfriend/{id}', ['as' => 'friendship.unFriend', 'uses' => 'FriendShipController@unFriend']);
 });
 //friendship end
-//posts
+//profile
 Route::get('/profile/settings', 'ProfileContoller@create');
 Route::resource('/profile', 'ProfileContoller');
+//images settings 
 Route::post('/profile/update_cover', 'ProfileContoller@changeCoverImage');
 Route::post('/profile/update_avatar', 'ProfileContoller@changeProfileImage');
-
-//posts end
-
+//images settings end
+//profile end end
+//summoner
+//Route::resource('/summoners', 'Riot\SummonerController');
+Route::get('/summoners/verify/{region}/{summoner}', 'Riot\SummonerController@verify');
+Route::get('/summoners/check/{sumonerId}', 'Riot\SummonerController@check');
+//summoner
 Route::get('/a7a', function() {
 //
 //    $activities = Activity::users(60)->get();
@@ -100,22 +110,17 @@ Route::get('/a7a', function() {
 //    ;
 // Last 1 minute)
     // dd(Auth::user()->getOnlineFriends());
- //   dd(Auth::user()->hasPassword());
-   // return view('add_summoner');
-     $like= Auth::user()->getLikesNotifications()->first()->notifyable()->first()->likable()->get();
-    return dd($like );
-   // return Post::find(4);
+    //   dd(Auth::user()->hasPassword());
+    // return view('add_summoner');
+//    $like = Auth::user()->getLikesNotifications()->first()->notifyable()->first()->likable()->get();
+//    return dd($like);
+    // return Post::find(4);
+ 
 });
 
 Route::post('newpass', 'User\UserController@newPassword');
 
 Route::post('profile/update', 'ProfileContoller@update')->name('user.update');
 
-Route::get('images/cover/{userID}', function($userID) {
-    $filepath = storage_path() . User::find($userID)->cover;
-    return Response::download($filepath);
-});
-Route::get('images/profile/{userID}', function($userID) {
-    $filepath = storage_path() . User::find($userID)->avatar;
-    return Response::download($filepath);
-});
+Route::get('/images/cover/{userID}', 'FilesController@cover');
+Route::get('/images/profile/{userID}', 'FilesController@profile');

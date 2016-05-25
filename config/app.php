@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
       |--------------------------------------------------------------------------
       | Application Environment
@@ -105,7 +104,6 @@ return [
       |
      */
     'providers' => [
-
         /*
          * Laravel Framework Service Providers...
          */
@@ -135,6 +133,8 @@ return [
         Cmgmyr\Messenger\MessengerServiceProvider::class,
         Kim\Activity\ActivityServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Nqxcode\LuceneSearch\ServiceProvider::class,
+        Riot\Api\ApiServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -155,7 +155,6 @@ return [
       |
      */
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
@@ -191,5 +190,7 @@ return [
         'Activity' => Kim\Activity\ActivityFacade::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Search' => Nqxcode\LuceneSearch\Facade::class,
+        'Riot' => Riot\Facades\Api::class,
     ],
 ];

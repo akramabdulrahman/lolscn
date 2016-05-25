@@ -14,7 +14,8 @@ class CreateSharesTable extends Migration {
         Schema::create('shares', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
             $table->integer('post_id')->unsigned();
-
+            $table->integer('share_type')->unsigned();
+            
             $table->timestamps();
         });
     }
