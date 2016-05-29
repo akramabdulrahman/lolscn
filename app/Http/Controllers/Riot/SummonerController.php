@@ -16,64 +16,36 @@ class SummonerController extends Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->middleware('verified');
+         $this->middleware('verified');
     }
 
     public function index() {
-        return 'asdas';
+        $summoners = Auth::user()->summoners()->get()->all();
+        return view('summoners', compact('summoners'));
     }
 
-    protected function SummonerExists($region, $summonerName) {
-        $obj;
+    protected function SummonerExists($summonerName, $region) {
 //make a request to riot driver with summoner name  
-        try {
-            $sum = new EndPoints\SummonerByName();
-
-            $summoner = R_API::get($sum->buildUrl(array(
-                                'summonerNames' => strtolower($summonerName),
-                                'region' => $region
-            )));
-            $SummonerObject = $sum->store('\App\Models\Riot\Summoner', $summoner, $region, $summonerName);
-        } catch (WrongHttpResponse $ex) {
-            session()->flash($ex);
-            redirect()->back();
-        }
-
-        return $SummonerObject;
+        return Summoner::getSummonerFromRiot($summonerName, $region);
         // if it doesnt exist redirect back with errors that the summoner doesnt exist 
         //if exists  return summoner model object containing summoner details 
     }
 
-    public function add() {
+    public function show($id) {
 
-        Summoner::firstOrCreate(Input::only(Summoner::getFillable()));
-
-//        $values = Input::only($user->getFillable());
-//        $summoner = Summoner::firstOrCreate([
-//                        //by summoner name and id and server id 
-//        ]);
-//
-//        //0 =unowned 1 =pending ownership 2 =owned
-//        if ($summoner->status != 2) {
-//            $summoner->status = 1;
-//            $summoner->save();
-//            Auth::user()->summoners()->attach($summoner->id);
-//            session()->flash('message', 'nice , now this summoner needs ownership verification');
-//        } else {
-//            session()->flash('error', 'this summoner was verified before for  ' . $summoner->owner());
-//        }
-//        return redirect()->back();
+        $summoner = Summoner::find($id);
+        dd($summoner->ingame());
+        return view('summoner', compact('summoner'));
     }
 
-    public function renew() {
-        //get summoner data from the driver , then perform sth similar to this 
-        $user = Auth::user();
-        try {
-            $values = Input::only($user->getFillable());
-            $user->update($values);
-        } catch (Exception $ex) {
-            return response($ex->getMessage(), 400);
-        }
+    public function add() {
+        
+    }
+
+    public function refresh($summonerId) {
+        $summoner = Summoner::find($summonerId);
+        $summoner->UpdateSummonerProps();
+        return redirect()->back()->with(array('status' => "summoner info updated "));
     }
 
     public function detach($id) {
@@ -84,15 +56,15 @@ class SummonerController extends Controller {
     }
 
     public function verify($region, $summonerName, SummonerVerificationMailer $mailer) {
-        $summoner = $this->SummonerExists($region, $summonerName);
+        $summoner = $this->SummonerExists($summonerName, $region);
         if ($summoner->exists) {
 
             if (is_null($summoner->users()->first())) {
                 $mailer->sendEmailConfirmationTo(Auth::user(), $summoner);
-                return redirect('/')->with('status', 'an email was sent to '.Auth::user()->email.' containing the token');
+                return redirect('/summoners/' . $summoner->id)->with('status', 'an email was sent to ' . Auth::user()->email . ' containing the token');
             } else {
 
-                return redirect('/')->with('error', 'this summoner is already verified for another user');
+                return redirect('/summoners/' . $summoner->id)->with('error', 'this summoner is already verified for another user');
             }
         }
     }
@@ -126,6 +98,21 @@ class SummonerController extends Controller {
             $flash = array('error' => "summoner is not yet verified");
         }
         return redirect('/')->with($flash);
+    }
+
+    public function champions($id, $season) {
+        $summoner = Summoner::find($id);
+
+        if (!in_array($season, config('ritoseasons'))) {
+            return redirect()->back()->with(array('error' => 'the season you forged wont work'));
+        }
+        $champ = $summoner->championsStatsFromRiot($season);
+        if (!is_null($champ)) {
+            $wariors = json_decode($champ->getContents(), true);
+            return view('champions', compact('wariors', 'summoner', 'season'));
+        } else {
+            return redirect()->back()->with(array('error' => 'summoner wasnt playing at ' . $season));
+        }
     }
 
 }

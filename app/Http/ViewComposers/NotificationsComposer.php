@@ -14,6 +14,7 @@ use Auth;
 use Cmgmyr\Messenger\Models\Thread;
 use Hootlex\Friendships\Status;
 use App\Country;
+use App\Models\Riot\Riotnotify;
 
 /**
  * Description of NotificationsComposer
@@ -35,6 +36,14 @@ class NotificationsComposer {
         $view->with('likesNotifications', Auth::user()->getLikesNotifications());
         $view->with('onlineFriends', Auth::user()->getOnlineFriends());
         $view->with('countries', Country::lists('name', 'id'));
+        $userFriends = Auth::user()->getFriends();
+        $summonerIds = array();
+        foreach ($userFriends as $frnd) {
+            if (!empty($frnd->summoners()->lists('id'))) {
+                $summonerIds[] = implode(',', $frnd->summoners()->lists('id')->toArray());
+            }
+        }
+        $view->with('riotNotifications', Riotnotify::WhereIn('summoner_id',$summonerIds)->orderBy('created_at','desc')->get()->toArray());
     }
 
 }

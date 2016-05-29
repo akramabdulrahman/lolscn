@@ -8,8 +8,7 @@ and open the template in the editor.
     <head>
         <title>Elo Fight</title>
         <meta charset="UTF-8">
-        <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
         <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
         <!-- Styles -->
@@ -18,6 +17,9 @@ and open the template in the editor.
         <link href="{{ url('css/hover.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ url('css/loguser.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ url('css/datepicker.css') }}" rel="stylesheet" type="text/css"/>
+         <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
     </head>
     <body>
 
@@ -68,6 +70,8 @@ and open the template in the editor.
         <script src="//cdn.rawgit.com/noelboss/featherlight/1.4.0/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+   
+
     <!--    {{ url('/logout') }}-->
     <script type="text/javascript">
 $('#maxsearch').focus(function ()

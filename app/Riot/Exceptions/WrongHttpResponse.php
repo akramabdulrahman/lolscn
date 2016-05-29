@@ -1,6 +1,7 @@
 <?php
 namespace Riot\Exceptions;
 
+use Guzzle\Common\Exception\RuntimeException;
 
 /**
 * @package MyExceptions

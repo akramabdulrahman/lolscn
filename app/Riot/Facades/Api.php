@@ -11,6 +11,8 @@ namespace Riot\Facades;
 use Illuminate\Support\Facades\Facade;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Exception\ClientException;
+use Riot\Exceptions\WrongHttpResponse;
 
 /**
  * Description of Api
@@ -23,11 +25,9 @@ class Api extends Facade {
         $client = new HttpClient([
             'verify' => false
         ]);
-        $res = $client->get($url);
-        if ($res->getStatusCode() != 200) {
-            throw new WrongHttpResponse('The HTTP Response Code Recieved By Riot was : ' . $res->getStatusCode() . "!= 200");
-        }
+            $res = $client->get($url);
         
+
         return $res->getBody();
     }
 

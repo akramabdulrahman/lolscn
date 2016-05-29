@@ -143,6 +143,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\NotificationsServiceProvider::class,
+        App\Providers\RiotServiceProvider::class,
     ],
     /*
       |--------------------------------------------------------------------------

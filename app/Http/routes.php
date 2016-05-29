@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Models\Social\Post;
 use App\Models\Riot\Summoner;
+use Riot\Facades\EndPoints;
+use Riot\Facades\Api As R_API;
 
 /*
   |--------------------------------------------------------------------------
@@ -88,17 +90,58 @@ Route::group(['prefix' => 'friendship'], function () {
 Route::get('/profile/settings', 'ProfileContoller@create');
 Route::resource('/profile', 'ProfileContoller');
 //images settings 
-Route::post('/profile/update_cover', 'ProfileContoller@changeCoverImage');
-Route::post('/profile/update_avatar', 'ProfileContoller@changeProfileImage');
+Route::post('/profile/update_cover/', 'ProfileContoller@changeCoverImage');
+Route::post('/profile/update_avatar/', 'ProfileContoller@changeProfileImage');
 //images settings end
 //profile end end
 //summoner
 //Route::resource('/summoners', 'Riot\SummonerController');
 Route::get('/summoners/verify/{region}/{summoner}', 'Riot\SummonerController@verify');
 Route::get('/summoners/check/{sumonerId}', 'Riot\SummonerController@check');
+Route::get('/summoners/champions/{id}/{season?}', 'Riot\SummonerController@champions');
+Route::get('/summoners/update/{id}/', 'Riot\SummonerController@refresh');
+Route::resource('/summoners', 'Riot\SummonerController');
 //summoner
+//search
+Route::get('/search/{q}/{opt?}',function($q,$opt){
+    $summoners =  Summoner::search($q,$opt)->get();
+    $users = User::search($q)->get();
+return view('partials.search.results',array('results'=>(new $model())->search($q)));
+    
+});
+//endsearch
+
+
 Route::get('/a7a', function() {
+    $a = "akr";
+    $users = User::search($a)->get();
+    dd($users);
+    
+    //dd(Auth::user()->getFriends()[0]->summoners);
+   //return ;
+//    $sum = Summoner::first();
+//    $league = new EndPoints\SummonerByIdLeague();
+//    //  return $sum;
+//    try {
+//        $summoner = R_API::get($league->buildUrl(array(
+//                            'summonerIds' => $sum->riot_id,
+//                            'region' => $sum->server
+//        )));
 //
+//        $responseData = json_decode($summoner, TRUE);
+//       // return $responseData;
+//        $rank = '';
+//        foreach ($responseData as $key => $value) {
+//            $rank = $value[0]['tier'] . $value[0]['entries'][0]['division'];
+//        }
+//        //.' . $rank
+//        $key = array_search(7700, array_column(config('ritoranks'), 'elo'));
+//        $lol = config('ritoranks');
+//        dd(array_values($lol)[$key]);
+//        return $lol[$key];
+//    } catch (Exception $ex) {
+//        echo 'summoner has no rank ';
+//    }
 //    $activities = Activity::users(60)->get();
 //    $friends = Auth::user()->getFriends()->lists('id')->toarray();
 //
@@ -115,7 +158,6 @@ Route::get('/a7a', function() {
 //    $like = Auth::user()->getLikesNotifications()->first()->notifyable()->first()->likable()->get();
 //    return dd($like);
     // return Post::find(4);
- 
 });
 
 Route::post('newpass', 'User\UserController@newPassword');
@@ -123,4 +165,4 @@ Route::post('newpass', 'User\UserController@newPassword');
 Route::post('profile/update', 'ProfileContoller@update')->name('user.update');
 
 Route::get('/images/cover/{userID}', 'FilesController@cover');
-Route::get('/images/profile/{userID}', 'FilesController@profile');
+Route::get('/images/profile/{userID}', 'FilesController@avatar');

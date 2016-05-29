@@ -26,8 +26,9 @@ abstract class EndPoint {
         foreach ($this->config[$this->configIndex]['required'] as $param) {
             $this->config[$this->configIndex]['endpoint'] = str_replace('{' . $param . '}', $requiredParamsArray[$param], $this->config[$this->configIndex]['endpoint']);
         }
-
-        return str_replace('{url}', $this->config[$this->configIndex]['endpoint'], $url) . "?api_key=" . Config('rito.api_key');
+        $base = str_replace('{url}', $this->config[$this->configIndex]['endpoint'], $url);
+        $del= (strpos($base, '?'))?'&':'?';
+        return $base .$del. "api_key=" . Config('rito.api_key');
     }
 
     public function buildBaseUrl($region) {
@@ -36,8 +37,8 @@ abstract class EndPoint {
 
     public function store($model, $stream,$region, $key=null) {
         $mod = new $model();
-        $data = json_decode($stream->getContents());
-       return $mod->store(empty($key) ? $data : $data->$key,$region);
+        $data = json_decode($stream->getContents(),TRUE);
+       return $mod->store(is_null($key) ? $data : $data[$key],$region);
     }
 
 }

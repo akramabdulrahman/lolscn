@@ -45,9 +45,25 @@ return [
         'required' => array('region', 'summonerIds'),
         'endpoint' => '/api/lol/{region}/v1.4/summoner/{summonerIds}'
     ],
+    'summoner.by-id.league' => [
+        'required' => array('region', 'summonerIds'),
+        'endpoint' => '/api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry'
+    ],
     'summoner.by-id.runes' => [
         'required' => array('region', 'summonerIds'),
         'endpoint' => '/api/lol/{region}/v1.4/summoner/{summonerIds}/runes'
+    ],
+    'summoner.by-id.matches' => [
+        'required' => array('region', 'summonerIds'),
+        'endpoint' => '/api/lol/{region}/v1.3/game/by-summoner/{summonerIds}/recent'
+    ],
+    'summoner.by-id.currentmatch' => [
+        'required' => array('region','platform', 'summonerIds'),
+        'endpoint' => '/observer-mode/rest/consumer/getSpectatorGameInfo/{platform}/{summonerIds}'
+    ],
+    'summoner.by-id.champs' => [
+        'required' => array('region', 'summonerIds','season'),
+        'endpoint' => '/api/lol/{region}/v1.3/stats/by-summoner/{summonerIds}/ranked?season={season}'
     ],
     'summoner.masteries.by-id' => [
         'required' => array('region', 'summonerIds'),

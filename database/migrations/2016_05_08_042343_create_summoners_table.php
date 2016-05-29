@@ -14,7 +14,7 @@ class CreateSummonersTable extends Migration
     {
         Schema::create('summoners', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('riot_id');
+            $table->integer('riot_id')->unsigned();
             $table->string('name');
             $table->string('server');
             $table->integer('lvl')->unsigned();

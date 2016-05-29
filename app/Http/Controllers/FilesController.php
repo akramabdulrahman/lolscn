@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use App\User;
+use Illuminate\Http\Response;
 
 class FilesController extends Controller
 {
     public function __construct() {
         parent::__construct();
     }
-    function cover(){
+    function cover($userID){
          $filepath = storage_path() . User::find($userID)->cover;
-    return Response::download($filepath);
+    return response()->download($filepath);
     }
-    function avatar(){
+    function avatar($userID){
         $filepath = storage_path() . User::find($userID)->avatar;
-    return Response::download($filepath);
+    return response()->download($filepath);
     }
 }

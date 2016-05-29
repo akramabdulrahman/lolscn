@@ -39,48 +39,7 @@
            <div class="setting_page">
              <h2> Summoner Accounts </h2>
              <hr />
-             
-             <ul>
-
-             <li>
-             <div class="summoenrbox">
-             <div class="summonerphoot"><img src="{{ url('/img/giveaway.png' ) }}" class="imgradiuse" width="70" height="70"></div>
-             <div class="summonername">SKT T1 FEED3R - PLATINUME III <Br /> North America</div>
-             <div class="summonercansel">Delete</div>
-             </div>
-             </li>             <li>
-             <div class="summoenrbox">
-             <div class="summonerphoot"><img src="{{ url('/img/giveaway.png' ) }}" class="imgradiuse" width="70" height="70"></div>
-             <div class="summonername">SKT T1 FEED3R - PLATINUME III <Br /> North America</div>
-             <div class="summonercansel">Delete</div>
-             </div>
-             </li>             <li>
-             <div class="summoenrbox">
-             <div class="summonerphoot"><img src="{{ url('/img/giveaway.png' ) }}" class="imgradiuse" width="70" height="70"></div>
-             <div class="summonername">SKT T1 FEED3R - PLATINUME III <Br /> North America</div>
-             <div class="summonercansel">Delete</div>
-             </div>
-             </li>             <li>
-             <div class="summoenrbox">
-             <div class="summonerphoot"><img src="{{ url('/img/giveaway.png' ) }}" class="imgradiuse" width="70" height="70"></div>
-             <div class="summonername">SKT T1 FEED3R - PLATINUME III <Br /> North America</div>
-             <div class="summonercansel">Delete</div>
-             </div>
-             </li>             <li>
-             <div class="summoenrbox">
-             <div class="summonerphoot"><img src="{{ url('/img/giveaway.png' ) }}" class="imgradiuse" width="70" height="70"></div>
-             <div class="summonername">SKT T1 FEED3R - PLATINUME III <Br /> North America</div>
-             <div class="summonercansel">Delete</div>
-             </div>
-             </li>             <li>
-             <div class="summoenrbox">
-             <div class="summonerphoot"><img src="{{ url('/img/giveaway.png' ) }}" class="imgradiuse" width="70" height="70"></div>
-             <div class="summonername">SKT T1 FEED3R - PLATINUME III <Br /> North America</div>
-             <div class="summonercansel">Delete</div>
-             </div>
-             </li>
-
-             </ul>
+             @include('partials.summoners.index',array('summoners'=>$summoners))
              <div class="clear"></div>
 
              <a href="#" data-featherlight="#x2"><div class="addmoresummoner">+</div></a>
