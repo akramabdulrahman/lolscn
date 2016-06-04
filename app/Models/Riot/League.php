@@ -28,7 +28,7 @@ class League extends Model {
             'leaguepts' => $leagueEntries['entries'][0]['leaguePoints'],
             'wins' => $leagueEntries['entries'][0]['wins'],
             'losses' => $leagueEntries['entries'][0]['losses'],
-            'in_series' => isset($leagueEntries['entries'][0]['miniSeries']) ? implode(',', $leagueEntries['entries'][0]['miniSeries']) : null,
+            'in_series' => isset($leagueEntries['entries'][0]['miniSeries']) ?  $leagueEntries['entries'][0]['miniSeries']['progress'] : null,
             'fresh_blood' => $leagueEntries['entries'][0]['isFreshBlood'],
             'hotstreak' => $leagueEntries['entries'][0]['isHotStreak'],
             'veteran' => $leagueEntries['entries'][0]['isVeteran'],

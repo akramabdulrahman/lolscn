@@ -4,6 +4,7 @@ namespace App\Models\Social;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+
 class Post extends Model {
 
     use PostRelations,
@@ -15,7 +16,7 @@ class Post extends Model {
      * @var array
      */
     protected $fillable = [
-        'user_id', 'body'
+        'user_id', 'body','post_type'
     ];
 
 }
@@ -29,6 +30,15 @@ trait PostRelations {
      */
     public function comments() {
         return $this->morphMany('App\Models\Social\Comment', 'commentable');
+    }
+
+    /**
+     * post has one notifyable.
+     *
+     * @return Mixed
+     */
+    public function riotnotify() {
+        return $this->hasOne('App\Models\Riot\Riotnotify');
     }
 
     /**
@@ -77,7 +87,7 @@ trait PostScopes {
         static::addGlobalScope('likesonpost', function(Builder $builder) {
             $builder->with('likes');
         });
-         static::addGlobalScope('postuser', function(Builder $builder) {
+        static::addGlobalScope('postuser', function(Builder $builder) {
             $builder->with('user');
         });
     }

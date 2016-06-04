@@ -34,6 +34,7 @@ class CreateMatchesTable extends Migration {
             $table->integer('level')->unsigned();;
             $table->integer('creeps')->unsigned();;
             $table->integer('duration')->unsigned();;
+            $table->boolean('final')->unsigned();
             $table->timestamp('date');
             
             $table->timestamps();

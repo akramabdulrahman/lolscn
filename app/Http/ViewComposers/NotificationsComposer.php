@@ -43,7 +43,7 @@ class NotificationsComposer {
                 $summonerIds[] = implode(',', $frnd->summoners()->lists('id')->toArray());
             }
         }
-        $view->with('riotNotifications', Riotnotify::WhereIn('summoner_id',$summonerIds)->orderBy('created_at','desc')->get()->toArray());
+        $view->with('riotNotifications', Riotnotify::WhereIn('summoner_id',$summonerIds)->orderBy('created_at','desc')->get());
     }
 
 }

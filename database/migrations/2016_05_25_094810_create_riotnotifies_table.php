@@ -14,6 +14,7 @@ class CreateRiotnotifiesTable extends Migration {
         Schema::create('riotnotifies', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('summoner_id')->unsigned()->index();
+            $table->integer('post_id')->unsigned()->index();
             $table->string('type');
             $table->morphs('riotable');
             

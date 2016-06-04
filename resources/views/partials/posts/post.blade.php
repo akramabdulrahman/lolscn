@@ -14,6 +14,26 @@
     </div>
     <div class="postBody">
         {{ $post->body }}
+        @if(!is_null($notif = $post->riotnotify()->first()))
+        <a href="#">
+            <div class="userTicker">
+                <div class="userOnlinePohoto"><img src="{{ url('/img/giveaway.png' ) }}" alt="" class="imgradiuse" width="30" height="30" /></div>
+
+                <div class="userTickerTime">{{ $notif['updated_at']->diffforhumans() }}</div>
+                <div class="userTickerDescription">
+                    @if($summoner = $notif->summoner()->first())
+                    {!! $notif->buildMsg($notif->type,["region"=>"{$summoner->server}","sum_name"=>" <span class='important'>$summoner->name</span> ","win"=>$notif->riotable->win?"<span class='importantwin'>Win</span>":"<span class='importantlost'>Lost</span>","match_type"=>$notif->riotable->match_type,"champion_name"=>config('ritochamps.'.$notif->riotable->championId)]) !!}      
+                    @endif
+                    @if($notif->type=='MATCH')
+                     @include('partials.riot.match', array('match'=>$notif->riotable))
+
+                    @endif
+                </div>
+
+            </div>
+        </a>
+        <div class="clear"></div>
+        @endif
     </div>
     <div class="postFooter">
         <div class="leftFooter" id="time{{$post->id}}">

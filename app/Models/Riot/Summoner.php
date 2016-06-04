@@ -26,37 +26,64 @@ class Summoner extends Model {
                 )));
                 ($league->store('\App\Models\Riot\Rank', $rank, $this->server));
             } catch (ClientException $ex) {
-                redirect()->back()->with(array('error' => $ex));
+                session()->flash('error', 'summoner is unranked');
             }
         }
 
-        $matches = new EndPoints\SummonerByIdMatches;
+        if ($this->lvl >= 10) {
+            $matches = new EndPoints\SummonerByIdMatches;
 
-        $match = R_API::get($matches->buildUrl(array(
-                            'summonerIds' => $this->riot_id,
-                            'region' => $this->server
-        )));
-        ($matches->store('\App\Models\Riot\Match', $match, $this->server));
+            $match = R_API::get($matches->buildUrl(array(
+                                'summonerIds' => $this->riot_id,
+                                'region' => $this->server
+            )));
+            ($matches->store('\App\Models\Riot\Match', $match, $this->server));
+        } else {
+            session()->flash('error', 'matches will be loaded when summoner level reaches 10');
+        }
         //opp$this->touch();
         return $this;
     }
 
-    public function exists($unique) {
-        return $this->where('riot_id', '=', $unique)->exists();
+    public function scopeExists($query, $unique) {
+
+        return $query->where(function($query) use ($unique) {
+                    $query-- > where('riot_id', '=', $unique);
+                })->exists();
+    }
+
+    public function scopeSearch($query, $search) {
+        $search = strtolower($search);
+
+        return $query->where(function($query) use ($search) {
+                    $query->where('name', 'LIKE', "%$search%");
+                });
+    }
+
+    public function scopeMatch($query, $search) {
+        $search = strtolower($search);
+        return $query->where(function($query) use ($search) {
+                    $query->where('name', '=', "$search");
+                });
     }
 
     public function store($summon, $region) {
         // dd($summoner);
-        $summoner = Summoner::firstOrCreate([
-                    'riot_id' => $summon['id'],
-                    'server' => $region,
-        ]);
-        if ($summoner->update([
-                    'name' => $summon['name'],
-                    'lvl' => $summon['summonerLevel'],
-                    'Icon' => $summon['profileIconId'],
-                ])) {
-            return $summoner;
+        if (!(empty($summon))) {
+            $summoner = Summoner::firstOrCreate([
+                        'riot_id' => $summon['id'],
+                        'server' => $region,
+            ]);
+            if ($summoner->update([
+                        'name' => $summon['name'],
+                        'lvl' => $summon['summonerLevel'],
+                        'Icon' => $summon['profileIconId'],
+                    ])) {
+                $summoner->UpdateSummonerProps();
+                return $summoner;
+            }
+        } else {
+            return null;
         }
     }
 
@@ -83,20 +110,39 @@ class Summoner extends Model {
                     'match_type' => isset($matches['gameQueueConfigId']) ? config('ritocurrmatchtypes.' . $matches['gameQueueConfigId']) : 0
         ]);
         $match->update([
-            'date' => intval($matches['gameStartTime'] / 1000),
+            'date' => (intval($matches['gameStartTime'] / 1000)),
             'duration' => $matches['gameLength'],
         ]);
         return $match;
     }
 
-    public static function getSummonerFromRiot($summonerName, $region) {
-        $sum = new EndPoints\SummonerByName();
+    public function hasUser() {
+        $user = $this->users()->first();
+        return is_null($user) ? false : $user;
+    }
 
-        $summoner = R_API::get($sum->buildUrl(array(
-                            'summonerNames' => strtolower($summonerName),
-                            'region' => $region
-        )));
-        return $sum->store('\App\Models\Riot\Summoner', $summoner, $region, $summonerName);
+    public static function getSummonerFromRiot($summonerName, $region) {
+        try {
+            echo $region;
+            $sum = new EndPoints\SummonerByName();
+
+            $summoner = R_API::get($sum->buildUrl(array(
+                                'summonerNames' => strtolower($summonerName),
+                                'region' => $region
+            )));
+            return $sum->store('\App\Models\Riot\Summoner', $summoner, $region, $summonerName);
+        } catch (ClientException $ex) {
+            return null;
+        }
+    }
+
+    public static function getSummonerFromRiotCrossRegion($summonerName) {
+        $configSvrs = config('ritosvrs');
+        $summoners = [];
+        foreach ($configSvrs as $svr => $obj) {
+            $summoners[$svr] = static::getSummonerFromRiot($summonerName, $svr);
+        }
+        return array_filter($summoners);
     }
 
     public function championsStatsFromRiot($season) {
@@ -113,29 +159,29 @@ class Summoner extends Model {
         }
     }
 
-    public static function search($summonerName, $region = null) {
-        $result = null;
-        if ($summoners = Summoner::where('name', 'like', "%$summonerName%")->get()) {
-            return $summoners->all();
-        } else {
-            if ($region != null) {
-                $result = Summoner::getSummonerFromRiot($summonerName, $region);
-            } else {
-                $result = [];
-                foreach (config('ritosvrs') as $key => $value) {
-                    $result[] = Summoner::getSummonerFromRiot($summonerName, $key);
-                }
-            }
-        }
-        return $result;
-    }
+//    public static function search($summonerName, $region = null) {
+//        $result = null;
+//        if ($summoners = Summoner::where('name', 'like', "%$summonerName%")->get()) {
+//            return $summoners->all();
+//        } else {
+//            if ($region != null) {
+//                $result = Summoner::getSummonerFromRiot($summonerName, $region);
+//            } else {
+//                $result = [];
+//                foreach (config('ritosvrs') as $key => $value) {
+//                    $result[] = Summoner::getSummonerFromRiot($summonerName, $key);
+//                }
+//            }
+//        }
+//        return $result;
+//    }
 
     public function users() {
         return $this->belongsToMany('App\User');
     }
 
     public function matches() {
-        return $this->hasMany('App\Models\Riot\Match')->orderBy('date', 'desc');
+        return $this->hasMany('App\Models\Riot\Match');
     }
 
     public function rank() {

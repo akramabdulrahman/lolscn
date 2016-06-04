@@ -22,7 +22,8 @@ class SummonerByIdCurrentMatch extends SummonerById {
     public function store($model, $stream, $region, $key = null) {
         $mod = new $model();
         $data = json_decode($stream->getContents(), TRUE);
-        return $mod->storeCurrent($data, $region, $key);
+        $mod->storeCurrent($data, $region, $key);
+        return $data;
     }
 
 }

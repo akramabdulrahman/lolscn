@@ -17,9 +17,8 @@ and open the template in the editor.
         <link href="{{ url('css/hover.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ url('css/loguser.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ url('css/datepicker.css') }}" rel="stylesheet" type="text/css"/>
-         <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
     </head>
     <body>
 
@@ -48,8 +47,7 @@ and open the template in the editor.
         <div class="top_main_nav">
             <div class="centerbuttonx">
                 <div class="leftx1">
-                    <input type="text" id="box" class="search_style" name="search" placeholder="Enter the summoner's name." />
-                    <button type="submit" id="box2" class="search_button"><img style="width:22px;height: 22px;" src="img/search.svg" alt="Search"></button>
+                    @include('partials.search.form')
                     <div class="realmenu">
                         <ul>
                             <li><span class="iconforface sliding-u-l-r-l">Favourites</span></li>
@@ -69,11 +67,12 @@ and open the template in the editor.
 
         <script src="//cdn.rawgit.com/noelboss/featherlight/1.4.0/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
-   
+        <script src="{{ url('js/ajaxify.js') }}"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 
-    <!--    {{ url('/logout') }}-->
-    <script type="text/javascript">
+
+        <!--    {{ url('/logout') }}-->
+        <script type="text/javascript">
 $('#maxsearch').focus(function ()
 {
     /*to make this flexible, I'm storing the current width in an attribute*/
@@ -103,7 +102,7 @@ $('#box').focus(function ()
     $('.search_style').animate({"width": "400px"}, 'slow');
 
 });
-    </script>
+        </script>
 
-</body>
+    </body>
 </html>

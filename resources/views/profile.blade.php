@@ -79,7 +79,6 @@
     </div>     
     @include('partials.ticker.ticker')
    </div>
-    {{dd($riotNotifications)}}
 
 
 <script>

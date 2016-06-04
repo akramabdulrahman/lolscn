@@ -77,10 +77,13 @@ class User extends Authenticatable implements CanResetPassword {
     public function hasPassword() {
         return ($this->password) ? 1 : 0;
     }
-    
-   public static function search($q){
-       return User::where('name','like',"%$q%")->orWhere('nickname','like',"%$q%");
-   }
+
+    public function scopeSearch($query, $search) {
+        return $query->where(function($query) use ($search) {
+                    $query->where('name', 'LIKE', "%$search%")
+                            ->orWhere('nickname', 'like', "%$search%");
+                });
+    }
 
 }
 
@@ -106,6 +109,7 @@ trait Relations {
     public function clans() {
         return $this->belongsToMany('App\Models\Social\clans');
     }
+
     /**
      * retrieve message source user 
      * * */
@@ -198,7 +202,7 @@ trait Scopes {
         parent::boot();
 
         static::addGlobalScope('userSummoners', function(Builder $builder) {
-           
+            
         });
     }
 

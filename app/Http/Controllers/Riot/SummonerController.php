@@ -9,14 +9,16 @@ use App\Mailers\SummonerVerificationMailer;
 use App\Models\Riot\Servers;
 use Riot\Facades\Api as R_API;
 use Riot\Facades\EndPoints;
+use App\User;
 use Auth;
 use URL;
+use Illuminate\Support\Facades\Input;
 
 class SummonerController extends Controller {
 
     public function __construct() {
         parent::__construct();
-         $this->middleware('verified');
+        $this->middleware('verified');
     }
 
     public function index() {
@@ -24,18 +26,47 @@ class SummonerController extends Controller {
         return view('summoners', compact('summoners'));
     }
 
+    public function index_profile($id) {
+        $summoners = User::findOrFail($id)->summoners()->get()->all();
+        return view('summoners', compact('summoners'));
+    }
+
     protected function SummonerExists($summonerName, $region) {
 //make a request to riot driver with summoner name  
-        return Summoner::getSummonerFromRiot($summonerName, $region);
-        // if it doesnt exist redirect back with errors that the summoner doesnt exist 
+        if (strlen($summonerName) >= 4) {
+            return Summoner::getSummonerFromRiot($summonerName, $region);
+        } else {
+            session()->flash('error', 'invalid summoner name');
+            return null;
+        }
+        //// if it doesnt exist redirect back with errors that the summoner doesnt exist 
         //if exists  return summoner model object containing summoner details 
     }
 
-    public function show($id) {
+    public function ingame($id) {
+        $summoner = Summoner::find($id);
+
+        return redirect()->back()->with(array('ingame'=>$summoner->ingame()));
+    }
+
+    public function show($id, Request $request) {
 
         $summoner = Summoner::find($id);
-        dd($summoner->ingame());
-        return view('summoner', compact('summoner'));
+        $summonerMatches = $summoner->matches();
+        if (Input::has('win')) {
+            $summonerMatches->where('win', Input::get('win'));
+        }
+        if (Input::has('champ')) {
+            $summonerMatches->where('championId', Input::get('champ'));
+        }
+        if (Input::has('match_type')) {
+            $summonerMatches->where('match_type', Input::get('match_type'));
+        }
+        $matches = $summonerMatches->latest('date')->get();
+
+        $request->flash();
+
+        return view('summoner', compact('summoner', 'matches'));
     }
 
     public function add() {
@@ -44,7 +75,7 @@ class SummonerController extends Controller {
 
     public function refresh($summonerId) {
         $summoner = Summoner::find($summonerId);
-        $summoner->UpdateSummonerProps();
+        ($summoner->UpdateSummonerProps());
         return redirect()->back()->with(array('status' => "summoner info updated "));
     }
 
@@ -57,9 +88,9 @@ class SummonerController extends Controller {
 
     public function verify($region, $summonerName, SummonerVerificationMailer $mailer) {
         $summoner = $this->SummonerExists($summonerName, $region);
-        if ($summoner->exists) {
+        if (!is_null($summoner) && $summoner->exists) {
 
-            if (is_null($summoner->users()->first())) {
+            if (($summoner->hasUser())) {
                 $mailer->sendEmailConfirmationTo(Auth::user(), $summoner);
                 return redirect('/summoners/' . $summoner->id)->with('status', 'an email was sent to ' . Auth::user()->email . ' containing the token');
             } else {
@@ -67,6 +98,7 @@ class SummonerController extends Controller {
                 return redirect('/summoners/' . $summoner->id)->with('error', 'this summoner is already verified for another user');
             }
         }
+        return redirect('/');
     }
 
     public function check($summonerId) {

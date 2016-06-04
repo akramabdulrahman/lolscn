@@ -25,8 +25,8 @@ class Api extends Facade {
         $client = new HttpClient([
             'verify' => false
         ]);
-            $res = $client->get($url);
-        
+        $res = $client->get($url);
+
 
         return $res->getBody();
     }
@@ -38,9 +38,7 @@ class Api extends Facade {
         ]);
         $promise = $client->getAsync($url, ['future' => true]);
         $promise->then(function(ResponseInterface $res) {
-            echo $res->getStatusCode() . "\n";
-
-            dd('success', $res);
+            return $res;
         }, function(RequestException $e) {
             dd($e);
         });

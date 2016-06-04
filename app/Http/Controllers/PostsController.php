@@ -26,6 +26,7 @@ class PostsController extends Controller {
         Post::create([
             'body' => $request->input('body'),
             'user_id' => Auth::user()->id,
+            'post_type'=>config('posttypes.USERMADE')
         ]);
 
 
@@ -44,8 +45,6 @@ class PostsController extends Controller {
             'post_id' => $post->id,
             'share_type' => Share_type::FRIEND_POSTED_ON_MY_WALL
         ]);
-
-
 
         return redirect()->back();
     }

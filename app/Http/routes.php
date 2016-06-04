@@ -7,6 +7,7 @@ use App\Models\Social\Post;
 use App\Models\Riot\Summoner;
 use Riot\Facades\EndPoints;
 use Riot\Facades\Api As R_API;
+use Search\Search;
 
 /*
   |--------------------------------------------------------------------------
@@ -100,25 +101,35 @@ Route::get('/summoners/verify/{region}/{summoner}', 'Riot\SummonerController@ver
 Route::get('/summoners/check/{sumonerId}', 'Riot\SummonerController@check');
 Route::get('/summoners/champions/{id}/{season?}', 'Riot\SummonerController@champions');
 Route::get('/summoners/update/{id}/', 'Riot\SummonerController@refresh');
+Route::get('/profile/{id}/summoners', 'Riot\SummonerController@index_profile');
+Route::get('/summoners/ingame/{id}', 'Riot\SummonerController@ingame');
 Route::resource('/summoners', 'Riot\SummonerController');
 //summoner
 //search
-Route::get('/search/{q}/{opt?}',function($q,$opt){
-    $summoners =  Summoner::search($q,$opt)->get();
-    $users = User::search($q)->get();
-return view('partials.search.results',array('results'=>(new $model())->search($q)));
-    
-});
+Route::get('/search/{filter?}', 'SearchController@search');
+//Route::get('/search/{q}/{opt?}', function($q, $opt) {
+//    $summoners = Summoner::search($q, $opt)->get();
+//    $users = User::search($q)->get();
+//    return view('partials.search.results', array('results' => (new $model())->search($q)));
+//});
 //endsearch
 
-
 Route::get('/a7a', function() {
-    $a = "akr";
-    $users = User::search($a)->get();
-    dd($users);
-    
+
+  //     return dd((new Search())->all('lewzeroni'));
+    return view('partials.summoners.ingame');
+//    $champs = config('ritochamps');
+//     return   $champ =  preg_grep('~'.strtolower(preg_quote('aatrox', '~')).'~', array_map('strtolower', $champs));
+//        
+//     
+
+//    return (new Search())->users('akr');
+//    return view ('partials.search.search');
+//    $a = "akr";
+//    $users = User::search($a)->get();
+//    dd($users);
     //dd(Auth::user()->getFriends()[0]->summoners);
-   //return ;
+    //return ;
 //    $sum = Summoner::first();
 //    $league = new EndPoints\SummonerByIdLeague();
 //    //  return $sum;

@@ -49,6 +49,7 @@
                 </div>
             </div>
         </form>
+        @if(!(session()->has('search')))
         <div class="clear"></div>
         <div class="giveawawy">
             <div class="moveallshit">
@@ -72,11 +73,13 @@
             </div>
         </div>
         <div class="clear"></div>
-
         @include('flash')
-
         @if($posts->count() > 0)
         @include('partials.posts.posts', array('posts'=>$posts));
+        @endif
+
+        @else
+        {{session('search')}}
         @endif
 
 

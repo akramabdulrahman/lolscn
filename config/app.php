@@ -45,7 +45,7 @@ return [
       | ahead and set this to a sensible default for you out of the box.
       |
      */
-    'timezone' => 'UTC',
+    'timezone' => 'GMT',
     /*
       |--------------------------------------------------------------------------
       | Application Locale Configuration
@@ -135,6 +135,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Nqxcode\LuceneSearch\ServiceProvider::class,
         Riot\Api\ApiServiceProvider::class,
+        Search\SearchServiceProvider::class,
         /*
          * Application Service Providers...
          */
