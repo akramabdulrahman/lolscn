@@ -25,6 +25,7 @@ Route::auth();
 
 $this->get('password/reset/{token?}', array('middleware' => 'delog', 'uses' => 'Auth\PasswordController@showResetForm'));
 
+
 //auth Login end
 
 Route::get('/', 'HomeController@index');
@@ -57,6 +58,7 @@ Route::get('/messages/user/{id}', 'MessagesController@messageToUser');
 //messages end
 //posts
 Route::post('/post', 'PostsController@store');
+Route::post('/posts/clan/{clan_id}', 'PostsController@storeOnClan');
 Route::get('/post/delete/{id}', 'PostsController@delete');
 Route::post('/post/onwall', 'PostsController@storeOnFriendWall');
 
@@ -109,22 +111,27 @@ Route::resource('/summoners', 'Riot\SummonerController');
 //summoner
 //search
 Route::get('/search/{filter?}', 'SearchController@search');
+Route::get('/guest/search/{filter?}', 'SearchController@searchguest');
 //Route::get('/search/{q}/{opt?}', function($q, $opt) {
 //    $summoners = Summoner::search($q, $opt)->get();
 //    $users = User::search($q)->get();
 //    return view('partials.search.results', array('results' => (new $model())->search($q)));
 //});
 //endsearch
+//clans
+Route::get('/clans/join/{id}', 'ClansController@join');
+Route::get('/clans/abandon/{id}', 'ClansController@abandon');
+Route::resource('/clans', 'ClansController');
 
+//clans end
 Route::get('/a7a', function() {
 
-  //     return dd((new Search())->all('lewzeroni'));
+    //     return dd((new Search())->all('lewzeroni'));
     return view('partials.summoners.ingame');
 //    $champs = config('ritochamps');
 //     return   $champ =  preg_grep('~'.strtolower(preg_quote('aatrox', '~')).'~', array_map('strtolower', $champs));
 //        
 //     
-
 //    return (new Search())->users('akr');
 //    return view ('partials.search.search');
 //    $a = "akr";

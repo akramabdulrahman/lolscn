@@ -62,9 +62,11 @@ class Summoner extends Model {
 
     public function scopeMatch($query, $search) {
         $search = str_replace(' ', '', strtolower($search));
+        
         return $query->where(function($query) use ($search) {
                     $query->where("name", '=', "$search");
                 });
+                
     }
 
     public function store($summon, $region) {

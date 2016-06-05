@@ -8,6 +8,11 @@ use App\User;
 
 class FriendShipController extends Controller {
 
+    public function __construct() {
+        parent::__construct();
+                $this->middleware('auth');
+
+    }
     /**
      * Display a listing of the resource.
      *

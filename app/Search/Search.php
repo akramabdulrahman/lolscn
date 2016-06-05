@@ -35,7 +35,7 @@ class Search {
 
                     return ['summoners' => Summoner::getSummonerFromRiotCrossRegion($search)];
                 }
-                return ['summoners' => Summoner::search($search)->get()];
+                return ['summoners' => Summoner::match($search)->get()];
             }
         }
         return ['summoners' => []];

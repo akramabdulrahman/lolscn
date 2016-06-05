@@ -107,7 +107,7 @@ trait Relations {
      * retrieve message source user 
      * * */
     public function clans() {
-        return $this->belongsToMany('App\Models\Social\clans');
+        return $this->belongsToMany('App\Models\Social\Clan');
     }
 
     /**

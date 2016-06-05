@@ -32,34 +32,26 @@
     </div>
     <div class="leftsideprofile">
         <div class="profile_main">
-            <div class="profile_cover"><img src="{{(!$currentUser->cover=='')?url("images/cover/".$currentUser->id):"//placehold.it/100"}}" alt="" class="imgradiuse" /></div>
-            <div class="profile_image"><img src="{{(!$currentUser->profile=='')?url("images/profile/".$currentUser->id):"//placehold.it/100"}}" alt="" width="100" height="100" class="imgradiuse" /></div>
+            <div class="profile_cover"><img src="{{(!$clan->cover=='')?url("clans/images/cover/".$clan->id):"//placehold.it/100"}}" alt="" class="imgradiuse" /></div>
+            <div class="profile_image"><img src="http://ddragon.leagueoflegends.com/cdn/6.10.1/img/profileicon/{{$clan->summonerIcon}}.png" alt="" width="100" height="100" class="imgradiuse"></div>
 
-            <a href="{{url('messages/user/'.$user->id)}}"><div class="profile_sendmessag"><span class="send_message_prfoile">Send Message</span></div></a>
+            <a href="{{url('messages/clan/'.$clan->id)}}"><div class="profile_sendmessag"><span class="send_message_prfoile">Send Message</span></div></a>
 
-            <div class="profile_name">{{$user->name}}<br />{{$user->nickname}}</div>
+            <div class="profile_name">{{$clan->name}}<br />({{$clan->users->count()}}) Members</div>
 
-
-            @if($currentUser->isFriendWith($user))
-            <a href="{{url('/friendship/unfriend/'.$user->id)}}"><div class="profile_addfriend"><span class="addfriend_prfoile">Unfriend</span></div></a>
-            @elseif($currentUser->hasFriendRequestFrom($user))
-            <a href="{{url('/friendship/accept/'.$user->id)}}"><div class=""><span class="addfriend_prfoile">Accept Friendship</span></div></a>
-            <a href="{{url('/friendship/decline/'.$user->id)}}"><div class=""><span class="addfriend_prfoile">Decline Friendship</span></div></a>
-            @elseif($user->hasFriendRequestFrom($currentUser))
-            <div class="profile_addfriend"><span class="addfriend_prfoile">Pending</span></div> 
-            @elseif(!$currentUser->isFriendWith($user))
-            <a href="{{url('/friendship/befriend/'.$user->id)}}"><div class="profile_addfriend"><span class="addfriend_prfoile">Send Request</span></div></a>
+            @if(!in_array($currentUser->id , $membersIds))
+            <a href="{{url('/clans/join/'.$clan->id)}}"><div class="profile_addfriend"><span class="addfriend_prfoile">Join</span></div></a>
+            @else
+            <a href="{{url('/clans/abandon/'.$clan->id)}}"><div class="profile_addfriend"><span class="addfriend_prfoile">Abandon</span></div></a>
 
             @endif
         </div>
         <div class="clear"></div>
-        <form role="form" method="POST" action="{{ ($user->id != $currentUser->id)?url('/post/onwall'):url('/post/') }}">
+        @if((in_array($currentUser->id , $membersIds)))
+        <form role="form" method="POST" action="{{ url('/posts/clan/'.$clan->id) }}">
             <div class="postFeedsFriends">
                 <div class="feedPost_profile">
                     {!! csrf_field() !!}
-                    @if($user->id != $currentUser->id)
-                    <input type="hidden" name="id" value="{{$user->id}}">
-                    @endif
                     <textarea placeholder="Think Like Teemo !" name="body" value="{{ old('body') }}" class="whatyouthink_profile"></textarea>
                     <div class="upladoImage"><input type="file" name="upload"/></div>
                     <div class="postButton_profile">
@@ -72,12 +64,13 @@
 
         @include('flash')
 
-        @if($posts->count() > 0)
-        @include('partials.posts.posts', array('posts'=>$posts))
+        @if($clan->posts->count() > 0)
+        @include('partials.posts.posts', array('posts'=>$clan->posts))
         @endif
-
+        @endif
     </div>     
-   </div>
+    @include('partials.ticker.ticker')
+</div>
 
 
 <script>

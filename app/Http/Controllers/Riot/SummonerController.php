@@ -76,7 +76,7 @@ class SummonerController extends Controller {
     public function refresh($summonerId) {
         $summoner = Summoner::find($summonerId);
         ($summoner->UpdateSummonerProps());
-        return redirect()->back()->with(array('status' => "summoner info updated "));
+        return redirect('/summoners/'.$summoner->id)->with(array('status' => "summoner info updated "));
     }
 
     public function detach($id) {

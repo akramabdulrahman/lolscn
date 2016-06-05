@@ -32,6 +32,18 @@ class PostsController extends Controller {
 
         return redirect()->back();
     }
+    public function storeOnClan($clan_id,Request $request) {
+        validator($request->all());
+        Post::create([
+            'body' => $request->input('body'),
+            'user_id' => Auth::user()->id,
+            'post_type'=>config('posttypes.CLANPOST'),
+            'clan_id'=>$clan_id
+        ]);
+
+
+        return redirect()->back();
+    }
 
     public function storeOnFriendWall(Request $request) {
         validator($request->all());
