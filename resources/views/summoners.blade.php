@@ -9,32 +9,38 @@
             <div class="notheadertitle">Add New Summoner Account</div>
         </div>
         <div class="clear"></div>
-        <div class="notebody2">
-            <label class="col-xs-12 ">Summoner Name:</label>
-            <div class="col-xs-12">
-                <input class="form-control" name="name" type="text" value="">
+        <form method='post' action='{{url('summoners/verify/')}}'>
+            {!! csrf_field() !!}
+
+            <div class="notebody2">
+                <label class="col-xs-12 ">Summoner Name:</label>
+                <div class="col-xs-12">
+                    <input class="form-control" name="name" type="text" value="">
+                </div>
+                <label class="col-xs-12 ">Summoner Server:</label>
+                <div class="col-xs-12">
+                    <select title="Select champ" name="server" data-live-search="true" value='{{old('server')}}' data-size="5" data-width="220px" class="selectpicker">
+                        <option class="bs-title-option" value='' >Choose Summoner's Region</option>
+                        @foreach(config('ritosvrs') as $key=>$value)
+                        <option label="la-en" value="{{$key}}" {{ (old("server")== $key)  ? "selected":"" }} data-content="<img class='img-circle' src='http://www.wadymasr.com/YouCanDoIt/img/regions/s6.png' width='20' height='20' alt='{{($value['name'])}}' /> {{($value['name'])}}"></option> 
+                        @endforeach
+                    </select>      
+                </div>
+
+                <label class="col-xs-12 ">HOW to verify summoner account ?</label>
+                <label class="col-xs-12 ">As Soon As You Hit The Verify Button, We will Send you an 
+                    Email contining a token , rename one of your rune pages with it , press verify on the summoner page and you're done
+                </label>
+
+                <div class="col-xs-12">
+                    <div class="genreateCoe">12321312321321321321</div>
+                    <img src="{{ url('/img/addsummoner.jpg' ) }}">   
+                </div>
+                <div class="col-xs-12 verfyme">
+                    <button type="submit" class="btn btn-success">Vierfy</button>
+                </div>
             </div>
-            <label class="col-xs-12 ">Summoner Server:</label>
-            <div class="col-xs-12">
-                <select title="Select champ" name="server" data-live-search="true" value='{{old('server')}}' data-size="5" data-width="150px" class="selectpicker">
-                    <option class="bs-title-option" value='' >All Champions</option>
-                    @foreach(config('ritosvrs') as $key=>$value)
-                    <option label="la-en" value="{{$key}}" {{ (old("server")== $key)  ? "selected":"" }} data-content="<img class='img-circle' src='http://www.wadymasr.com/YouCanDoIt/img/regions/s6.png' width='20' height='20' alt='{{($value['name'])}}' /> {{($value['name'])}}"></option> 
-                    @endforeach
-                </select>      
-            </div>
-            <div class="col-xs-12">
-                <input class="form-control" type="text" value="">
-            </div>
-            <label class="col-xs-12 ">HOW to verify summoner account ?</label>
-            <div class="col-xs-12">
-                <div class="genreateCoe">12321312321321321321</div>
-                <img src="{{ url('/img/addsummoner.jpg' ) }}">   
-            </div>
-            <div class="col-xs-12 verfyme">
-                <button type="button" class="btn btn-success">Vierfy Me</button>
-            </div>
-        </div>
+        </form>
     </div>
 
     <div class="leftsideprofile">
@@ -62,7 +68,13 @@
             this.form.submit()
             return false;
         }
+    })
+    $('.selectpicker').on('click','.notheader',function(){
+        console.log('a8a');
+        this.selectpicker('refresh');
     });
+
+    ;
 </script>
 
 

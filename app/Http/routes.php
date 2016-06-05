@@ -97,8 +97,10 @@ Route::post('/profile/update_avatar/', 'ProfileContoller@changeProfileImage');
 //profile end end
 //summoner
 //Route::resource('/summoners', 'Riot\SummonerController');
-Route::get('/summoners/verify/{region}/{summoner}', 'Riot\SummonerController@verify');
-Route::get('/summoners/check/{sumonerId}', 'Riot\SummonerController@check');
+Route::get('/summoners/verify/{region}/{summoner}', 'Riot\SummonerVerificationController@verify');
+Route::post('/summoners/verify/', 'Riot\SummonerVerificationController@verify');
+Route::post('/summoners/verify/', 'Riot\SummonerVerificationController@post_verify');
+Route::get('/summoners/check/{sumonerId}', 'Riot\SummonerVerificationController@check');
 Route::get('/summoners/champions/{id}/{season?}', 'Riot\SummonerController@champions');
 Route::get('/summoners/update/{id}/', 'Riot\SummonerController@refresh');
 Route::get('/profile/{id}/summoners', 'Riot\SummonerController@index_profile');

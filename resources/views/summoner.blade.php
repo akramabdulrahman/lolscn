@@ -45,6 +45,7 @@
 
             <div class="profile_name">{{$summoner->name}}<br>Level {{$summoner->lvl}}</div>
             <a href="{{url('summoners/update/'.$summoner->id)}}"><div class="profile_addfriend"><span class="addfriend_prfoile">Update</span></div></a>
+            <a href="{{url('summoners/champions/'.$summoner->id)}}"><div class="profile_addfriend"><span class="addfriend_prfoile">Public stats</span></div></a>
             <div class="clear"></div>
             @include('flash')
 
@@ -84,9 +85,10 @@
                     <ul>
                         <li>
                             <select title="Select win" name="win"  data-live-search="false" data-size="5" data-width="150px" class="selectpicker">
-                                <option class="bs-title-option" value=''>Game Finish</option>
-                                <option label="la-en" value="1" {{ (old("win")) ? "selected":"" }} data-content="<img class='img-circle' src='http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg' width='20' height='20' alt='Victory' /> Victory"></option> 
-                                <option label="la-en" value="0" {{ (old("win"))  ? "selected":"" }} data-content="<img class='img-circle' src='http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg' width='20' height='20' alt='Deafate' /> Deafate"></option> 
+                                <option class="bs-title-option" value='' >Game Finish</option>
+                                <option label="la-en" value="0" {{ (old("win") )  ? "selected":"" }} data-content="<img class='img-circle' src='http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg' width='20' height='20' alt='Deafate' /> Defeat"></option> 
+                                <option label="la-en" value="1" {{ (old("win")==1) ? "selected":"" }} data-content="<img class='img-circle' src='http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg' width='20' height='20' alt='Victory' /> Victory"></option> 
+
                             </select>
                         </li>
                         <li>
@@ -115,12 +117,12 @@
             <div class="clear"></div>
             <div id="summary">
                 @if(Session::has('ingame'))
-                 @include('partials.summoners.ingame',array('ingame'=>Session::get('ingame')))
+                @include('partials.summoners.ingame',array('ingame'=>Session::get('ingame')))
                 @endif
                 <div class="clear"></div>
 
                 @foreach($matches as $match)
-                    @include('partials.riot.match',array('match'=>$match))
+                @include('partials.riot.match',array('match'=>$match))
                 @endforeach     
             </div>  
         </div>

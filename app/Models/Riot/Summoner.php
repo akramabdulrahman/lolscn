@@ -53,17 +53,17 @@ class Summoner extends Model {
     }
 
     public function scopeSearch($query, $search) {
-        $search = strtolower($search);
+        $search = str_replace(' ', '', strtolower($search));
 
         return $query->where(function($query) use ($search) {
-                    $query->where('name', 'LIKE', "%$search%");
+                    $query->where("name", 'SOUNDS LIKE', "%$search%");
                 });
     }
 
     public function scopeMatch($query, $search) {
-        $search = strtolower($search);
+        $search = str_replace(' ', '', strtolower($search));
         return $query->where(function($query) use ($search) {
-                    $query->where('name', '=', "$search");
+                    $query->where("name", '=', "$search");
                 });
     }
 
@@ -123,7 +123,7 @@ class Summoner extends Model {
 
     public static function getSummonerFromRiot($summonerName, $region) {
         try {
-            echo $region;
+            //echo $region;
             $sum = new EndPoints\SummonerByName();
 
             $summoner = R_API::get($sum->buildUrl(array(

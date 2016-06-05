@@ -87,7 +87,6 @@ $('#maxsearch').focus(function ()
 });
 
 
-
 $('#box').focus(function ()
 {
     /*to make this flexible, I'm storing the current width in an attribute*/

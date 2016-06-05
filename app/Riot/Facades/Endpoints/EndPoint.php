@@ -38,7 +38,7 @@ abstract class EndPoint {
     public function store($model, $stream,$region, $key=null) {
         $mod = new $model();
         $data = json_decode($stream->getContents(),TRUE);
-       return $mod->store(is_null($key) ? $data : $data[$key],$region);
+       return $mod->store(is_null($key) ? $data : $data[str_replace(' ', '', $key)],$region);
     }
 
 }

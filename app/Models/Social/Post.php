@@ -64,6 +64,14 @@ trait PostRelations {
      *
      * @return User
      */
+    public function clan() {
+        return $this->belongsTo('App\Models\Social\Clan');
+    }
+    /**
+     * post belongs to a user.
+     *
+     * @return User
+     */
     public function user() {
         return $this->belongsTo('App\User');
     }

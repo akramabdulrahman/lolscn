@@ -18,7 +18,7 @@ class SummonerController extends Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->middleware('verified');
+        $this->middleware('web');
     }
 
     public function index() {
@@ -51,7 +51,7 @@ class SummonerController extends Controller {
 
     public function show($id, Request $request) {
 
-        $summoner = Summoner::find($id);
+        $summoner = Summoner::findOrFail($id);
         $summonerMatches = $summoner->matches();
         if (Input::has('win')) {
             $summonerMatches->where('win', Input::get('win'));
@@ -131,8 +131,7 @@ class SummonerController extends Controller {
         }
         return redirect('/')->with($flash);
     }
-
-    public function champions($id, $season) {
+    public function champions($id, $season='SEASON2016') {
         $summoner = Summoner::find($id);
 
         if (!in_array($season, config('ritoseasons'))) {
