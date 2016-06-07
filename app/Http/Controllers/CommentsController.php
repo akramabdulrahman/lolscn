@@ -29,7 +29,7 @@ class CommentsController extends Controller {
         validator($request->all());
         $post = Post::where('id', $request->input('commentable_id'))->firstOrFail();
         $post->comments()->save($this->createComment($request->input('body')));
-        return redirect()->away("/");
+        return redirect()->back();
     }
 
     /**

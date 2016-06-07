@@ -12,10 +12,10 @@ class CreateSharesTable extends Migration {
      */
     public function up() {
         Schema::create('shares', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('post_id')->unsigned();
             $table->integer('share_type')->unsigned();
-            
             $table->timestamps();
         });
     }

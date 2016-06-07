@@ -20,7 +20,7 @@ and open the template in the editor.
         <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 
     </head>
-    <body>
+    <body style="overflow-x: hidden">
 
         <div class="top_navigation">
             <div class="centerbutton">

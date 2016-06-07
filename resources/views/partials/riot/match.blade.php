@@ -1,4 +1,6 @@
- <div class="clear"></div>
+ 
+<a href='{{url('/summoners/matches/realtime/'.$match->id)}}'>
+<div class="clear"></div>
                 <div class="postBody">
                     <div class="winPost" style='{{$match->win?"background-color:#d1eca3;":"background-color:#e2b6b3;"}}'>
 
@@ -46,3 +48,4 @@
                         <div class="clear"></div>
                     </div>
                 </div>
+</a>

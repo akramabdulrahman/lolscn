@@ -17,12 +17,17 @@
                     @endif
                     @endif
                     @if ($value->type == "RANK")
-                    {!! $value->buildMsg($value->type,["region"=>"{$summoner->server}","sum_name"=>" <span class='important'>$summoner->name</span> ","downorup"=>" <span class='important'>{$value->riotable->type}</span>",
+                    {!! 
+                    $value->buildMsg($value->type,
+                    ["region"=>$summoner->server,
+                    "sum_name"=> " <span class='important'>$summoner->name</span> ",
+                    "downorup"=>" <span class='important'>{$value->riotable->type}</span>",
                     "last_rank"=>str_replace(' ','_',array_values(config('ritoranks'))[array_search($value->riotable->last_rank, array_column(config('ritoranks'), 'elo'))]['name']),
-,
                     "new_rank"=>str_replace(' ','_',array_values(config('ritoranks'))[array_search($value->riotable->new_rank, array_column(config('ritoranks'), 'elo'))]['name'])
-
+                                        ])
+                    !!}                 
                     @endif
+
                     @endif
 
                 </div>

@@ -19,6 +19,15 @@ class Share extends Model {
     public function post(){
         return $this->belongsTo('App\Models\Social\Post');
     }
+    
+    /**
+     * share morphs notif.
+     *
+     * @return Post
+     */
+    public function notification() {
+        return $this->morphOne('App\Notification','notifyable');
+    }
     /**
      * The "booting" method of the model.
      *

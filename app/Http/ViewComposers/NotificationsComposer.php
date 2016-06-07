@@ -34,6 +34,7 @@ class NotificationsComposer {
         $view->with('friendRequests', Friendship::WhereRecipient(Auth::user())->whereStatus(Status::PENDING)->get());
         $view->with('unseenMessages', Thread::forUserWithNewMessages(Auth::user()->id)->latest('updated_at')->distinct('id')->get());
         $view->with('likesNotifications', Auth::user()->getLikesNotifications());
+        $view->with('notifications', Auth::user()->notifications()->where('read', '=', 0)->latest()->get());
         $view->with('onlineFriends', Auth::user()->getOnlineFriends());
         $view->with('countries', Country::lists('name', 'id'));
         $userFriends = Auth::user()->getFriends();
@@ -43,7 +44,7 @@ class NotificationsComposer {
                 $summonerIds[] = implode(',', $frnd->summoners()->lists('id')->toArray());
             }
         }
-        $view->with('riotNotifications', Riotnotify::WhereIn('summoner_id',$summonerIds)->orderBy('created_at','desc')->get());
+        $view->with('riotNotifications', Riotnotify::WhereIn('summoner_id', $summonerIds)->orderBy('created_at', 'desc')->get());
     }
 
 }

@@ -21,24 +21,31 @@ class PostsController extends Controller {
         ]);
     }
 
+    public function show($id) {
+        $post = Post::findOrFail($id);
+        
+        return view('post',compact('post'));
+    }
+
     public function store(Request $request) {
         validator($request->all());
         Post::create([
             'body' => $request->input('body'),
             'user_id' => Auth::user()->id,
-            'post_type'=>config('posttypes.USERMADE')
+            'post_type' => config('posttypes.USERMADE')
         ]);
 
 
         return redirect()->back();
     }
-    public function storeOnClan($clan_id,Request $request) {
+
+    public function storeOnClan($clan_id, Request $request) {
         validator($request->all());
         Post::create([
             'body' => $request->input('body'),
             'user_id' => Auth::user()->id,
-            'post_type'=>config('posttypes.CLANPOST'),
-            'clan_id'=>$clan_id
+            'post_type' => config('posttypes.CLANPOST'),
+            'clan_id' => $clan_id
         ]);
 
 
@@ -50,6 +57,7 @@ class PostsController extends Controller {
         $post = Post::create([
                     'body' => $request->input('body'),
                     'user_id' => Auth::user()->id,
+                    'post_type' => config('posttypes.USERMADE'),
         ]);
 
         Share::Create([

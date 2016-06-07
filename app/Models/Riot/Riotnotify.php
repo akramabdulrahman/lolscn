@@ -38,6 +38,7 @@ class Riotnotify extends Model {
 
     public  function buildMsg($type,$requiredParamsArray) {
         $config = Config('ritonotiftypes.'.$type);
+      
         foreach ($config['required'] as $param) {
             $config['txt'] = str_replace('{' . $param . '}', $requiredParamsArray[$param], $config['txt']);
         }

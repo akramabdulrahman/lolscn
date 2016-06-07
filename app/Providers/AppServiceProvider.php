@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider {
     public function boot() {
 
         view()->composer(
-                ['profile','clan','clans', 'partials.profile.profileinfo', 'settings','partials.ticker.ticker', 'home', 'messsages', 'partials.notification.fixed', 'partials.notification.friends', 'partials.notification.messages','champions','summoner'], 'App\Http\ViewComposers\NotificationsComposer'
+                ['profile','clan','clans', 'partials.profile.profileinfo','partials.notification.likes', 'settings','partials.ticker.ticker', 'home', 'messsages', 'partials.notification.fixed', 'partials.notification.friends', 'partials.notification.messages','champions','summoner'], 'App\Http\ViewComposers\NotificationsComposer'
         );
     }
 

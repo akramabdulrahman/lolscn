@@ -74,6 +74,15 @@ trait CommentRelations {
     public function likes() {
         return $this->morphMany('App\Models\Social\Like', 'likable');
     }
+    
+     /**
+     * comment morphs notification.
+     *
+     * @return Post
+     */
+    public function notification() {
+        return $this->morphOne('App\Notification','notifyable');
+    }
 
 }
 

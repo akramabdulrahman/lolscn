@@ -4,8 +4,10 @@ namespace App;
 
 class Notification_type {
 
-    const MESSAGE = 0;
     const LIKE = 1;
-    const COMMENT = 1;
+    const COMMENT = 2;
+    const COMMENTONCOMMENT = 3;
+    const Share = 4;
+    
 
 }

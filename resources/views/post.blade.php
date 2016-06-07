@@ -1,5 +1,3 @@
-@extends('layouts.home')
-@section('content')
 
 <div class="postWidget">
     <div class="postHead">
@@ -201,4 +199,3 @@
     });
 </script>
 
-@endsection

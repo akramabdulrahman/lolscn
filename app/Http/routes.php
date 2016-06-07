@@ -8,6 +8,7 @@ use App\Models\Riot\Summoner;
 use Riot\Facades\EndPoints;
 use Riot\Facades\Api As R_API;
 use Search\Search;
+use App\Models\Riot\Match;
 
 /*
   |--------------------------------------------------------------------------
@@ -58,6 +59,7 @@ Route::get('/messages/user/{id}', 'MessagesController@messageToUser');
 //messages end
 //posts
 Route::post('/post', 'PostsController@store');
+Route::get('/posts/{id}', 'PostsController@show');
 Route::post('/posts/clan/{clan_id}', 'PostsController@storeOnClan');
 Route::get('/post/delete/{id}', 'PostsController@delete');
 Route::post('/post/onwall', 'PostsController@storeOnFriendWall');
@@ -122,7 +124,10 @@ Route::get('/guest/search/{filter?}', 'SearchController@searchguest');
 Route::get('/clans/join/{id}', 'ClansController@join');
 Route::get('/clans/abandon/{id}', 'ClansController@abandon');
 Route::resource('/clans', 'ClansController');
-
+Route::get('/summoners/matches/realtime/{id}', function($id) {
+    $match = Match::find($id);
+    return view('partials.timeline.timeline', compact("match"));
+});
 //clans end
 Route::get('/a7a', function() {
 

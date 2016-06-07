@@ -123,6 +123,7 @@ trait Relations {
     public function likes() {
         return $this->hasMany('App\Models\Social\Like');
     }
+    
 
     /**
      * retrieve shares made by user 
